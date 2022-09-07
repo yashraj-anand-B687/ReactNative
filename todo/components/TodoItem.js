@@ -1,48 +1,43 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function TodoItem({item, pressHandler, comp}) {
-  //   const [isSelected, setSelection] = useState(false);
-  //   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
-  //   const cbox = (newValue, key) => {
-  //     // comp(key);
-  //     setToggleCheckBox(newValue);
-  //   };
-
+export default function TodoItem({item, pressHandler, editHandler, comp}) {
   return (
-    <TouchableOpacity>
-      <View style={styles.item}>
-        <View style={styles.iteml}>
-          <CheckBox
-            style={styles.cbox}
-            disabled={false}
-            value={item.complete}
-            // onChange={pressHandler(item.key)}
-            onValueChange={() => comp(item.key)}
+    <View style={styles.item}>
+      <View style={styles.iteml}>
+        <CheckBox
+          style={styles.cbox}
+          disabled={false}
+          value={item.complete}
+          onValueChange={() => comp(item.key)}
+        />
+        {item.complete ? (
+          <>
+            <Text style={styles.textc}>{item.text}</Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.textt}>{item.text}</Text>
+          </>
+        )}
+      </View>
+      <View style={styles.icon}>
+        <TouchableHighlight>
+          <AntDesign
+            style={styles.iconn}
+            name="edit"
+            onPress={() => editHandler(item.key)}
           />
-          {item.complete ? (
-            <>
-              <Text style={styles.textc}>{item.text}</Text>
-            </>
-          ) : (
-            <>
-              <Text style={styles.textt}>{item.text}</Text>
-            </>
-          )}
-          {/* <Text style={styles.textt}>
-          {item.complete === 'true' ? item.complete : item.text}
-        </Text> */}
-        </View>
+        </TouchableHighlight>
         <AntDesign
+          style={styles.iconn}
           name="delete"
           onPress={() => pressHandler(item.key)}
-          style={styles.icon}
         />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -78,8 +73,13 @@ const styles = StyleSheet.create({
   icon: {
     marginTop: 5,
     color: '#333',
-    fontSize: 18,
     marginRight: 5,
+    flexDirection: 'row',
+  },
+  iconn: {
+    padding: 5,
+    color: '#333',
+    fontSize: 18,
   },
   iteml: {
     flexDirection: 'row',
