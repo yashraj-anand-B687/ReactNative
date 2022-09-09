@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {add} from '../store/action';
 import Foundation from 'react-native-vector-icons/Foundation';
 
-export default function AddTodo({setHandler}) {
+export default function AddTodo() {
+  const dispatch = useDispatch();
   const [text, setText] = useState('');
 
   const changeHandler = val => {
@@ -16,14 +19,13 @@ export default function AddTodo({setHandler}) {
           style={styles.input}
           placeholder="Add To-Do"
           onChangeText={val => changeHandler(val)}
-          onSubmitEditing={() => setHandler(text)}
+          onSubmitEditing={() => dispatch(add(text))}
         />
         <Foundation
           name="plus"
-          onPress={() => setHandler(text)}
+          onPress={() => dispatch(add(text))}
           style={styles.icon}
         />
-        {/* <VectorImage source={require('./image.svg')} /> */}
       </View>
       <View>
         <Text style={styles.head2}>Your To-Do List:</Text>
