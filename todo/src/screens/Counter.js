@@ -9,16 +9,16 @@ import {
   TextInput,
   Text,
 } from 'react-native';
-import {firestore} from '../App';
-import AddTodo from './components/AddTodo';
-import Header from './components/Header';
-import TodoItem from './components/TodoItem';
+import {firestore} from '../../App';
+import AddTodo from '../components/AddTodo';
+import Header from '../components/Header';
+import TodoItem from '../components/TodoItem';
 
 export default function Counter({navigation}) {
   const usersCollectionRef = firestore().collection('todos');
   const [firdb, setFirdb] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [vall, setVall] = useState({});
+  const [editval, setEditVal] = useState({});
 
   useEffect(() => {
     callData();
@@ -45,21 +45,21 @@ export default function Counter({navigation}) {
   const editHandler = id => {
     //edit
     firdb.map(todo => {
-      todo.id === id ? setVall({text: todo.todo, id: id}) : todo;
+      todo.id === id ? setEditVal({text: todo.todo, id: id}) : todo;
     });
     setModalOpen(true);
   };
 
   const chHandler = val => {
     //edit handler
-    setVall(prev => ({...prev, text: val}));
+    setEditVal(prev => ({...prev, text: val}));
   };
 
   const savHandler = e => {
     usersCollectionRef
-      .doc(vall.id) //update values of specific object identified with id
+      .doc(editval.id) //update values of specific object identified with id
       .update({
-        todo: vall.text,
+        todo: editval.text,
       })
       .then(() => {
         console.log('todo updated!');
@@ -76,7 +76,7 @@ export default function Counter({navigation}) {
             <TextInput
               style={styles.input}
               placeholder="Edit To-Do"
-              value={vall.text}
+              value={editval.text}
               onChangeText={val => chHandler(val)}
               onSubmitEditing={() => savHandler()}
             />
@@ -87,7 +87,7 @@ export default function Counter({navigation}) {
         </View>
       </Modal>
       <ImageBackground
-        source={require('./components/img/bgImage.png')}
+        source={require('../components/img/bgImage.png')}
         style={styles.image}>
         <Header />
         <View style={styles.content}>
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   contentm: {
     padding: 20,
