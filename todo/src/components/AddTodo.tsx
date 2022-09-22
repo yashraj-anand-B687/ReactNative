@@ -1,29 +1,44 @@
-import React, {useState} from 'react';
+import React, {useState, FC} from 'react';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {firestore} from '../../App';
 
-export default function AddTodo({setHandler}) {
-  const [text, setText] = useState('');
+interface Props{
+  addo : () => void;
+}
 
-  const changeHandler = val => {
-    console.log(val);
+const AddTodo : FC<Props> = (props) => {
+  const usersCollectionRef = firestore().collection('todos');
+  const [text, setText] = useState<string>('');
+
+  const addVal = () => {
+    setText('');
+    usersCollectionRef //addition of object to collection
+      .add({
+        todo: text,
+        completed: false,
+      })
+      .then(() => {
+        console.log('todo added!');
+      });
+    props.addo();
+  };
+
+  const changeHandler = (val: string): void => {
     setText(val);
   };
+
   return (
     <>
       <View style={styles.container}>
         <TextInput
+          value={text}
           style={styles.input}
           placeholder="Add To-Do"
           onChangeText={val => changeHandler(val)}
-          onSubmitEditing={() => setHandler(text)}
+          onSubmitEditing={addVal}
         />
-        <Foundation
-          name="plus"
-          onPress={() => setHandler(text)}
-          style={styles.icon}
-        />
-        {/* <VectorImage source={require('./image.svg')} /> */}
+        <Foundation name="plus" onPress={addVal} style={styles.icon} />
       </View>
       <View>
         <Text style={styles.head2}>Your To-Do List:</Text>
@@ -31,6 +46,8 @@ export default function AddTodo({setHandler}) {
     </>
   );
 }
+
+export default AddTodo;
 
 const styles = StyleSheet.create({
   container: {

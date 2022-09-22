@@ -1,7 +1,7 @@
-import React from 'react';
+import React,{FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default function Header() {
+const Header: FC = () => {
   return (
     <View style={styles.header}>
       <Text style={styles.title1}>Hello User</Text>
@@ -9,6 +9,8 @@ export default function Header() {
     </View>
   );
 }
+
+export default Header;
 
 const styles = StyleSheet.create({
   header: {
